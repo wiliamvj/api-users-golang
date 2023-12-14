@@ -1,6 +1,11 @@
 package userservice
 
-import "github.com/wiliamvj/api-users-golang/internal/repository/userrepository"
+import (
+  "context"
+
+  "github.com/wiliamvj/api-users-golang/internal/dto"
+  "github.com/wiliamvj/api-users-golang/internal/repository/userrepository"
+)
 
 func NewUserService(repo userrepository.UserRepository) UserService {
   return &service{
@@ -13,5 +18,5 @@ type service struct {
 }
 
 type UserService interface {
-  CreateUser() error
+  CreateUser(ctx context.Context, u dto.CreateUserDto) error
 }
