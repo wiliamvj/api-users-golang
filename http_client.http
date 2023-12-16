@@ -1,3 +1,5 @@
+
+## CreateUser
 POST http://localhost:8080/user HTTP/1.1
 content-type: application/json
 
@@ -5,4 +7,44 @@ content-type: application/json
   "name": "John Doe",
   "email": "john.doe@email.com",
   "password": "12345678@"
+}
+
+###
+
+## UpdateUser
+PATCH http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+content-type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@email.com"
+}
+
+###
+
+## GetUserByID
+GET http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+content-type: application/json
+
+###
+
+## DeleteUser
+DELETE http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+content-type: application/json
+
+###
+
+## FindManyUsers
+GET http://localhost:8080/user HTTP/1.1
+content-type: application/json
+
+###
+
+## UpdateUserPassword
+PATCH http://localhost:8080/user/password/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+content-type: application/json
+
+{
+  "password": "12345678@",
+  "old_password": "12345678@"
 }

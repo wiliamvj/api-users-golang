@@ -8,6 +8,7 @@ import (
   "github.com/go-chi/chi"
   "github.com/wiliamvj/api-users-golang/config/env"
   "github.com/wiliamvj/api-users-golang/config/logger"
+  _ "github.com/wiliamvj/api-users-golang/docs"
   "github.com/wiliamvj/api-users-golang/internal/database"
   "github.com/wiliamvj/api-users-golang/internal/database/sqlc"
   "github.com/wiliamvj/api-users-golang/internal/handler/routes"
@@ -41,6 +42,7 @@ func main() {
   // init routes
   router := chi.NewRouter()
   routes.InitUserRoutes(router, newUserHandler)
+  routes.InitDocsRoutes(router)
 
   port := fmt.Sprintf(":%s", env.Env.GoPort)
   slog.Info(fmt.Sprintf("server running on port %s", port))

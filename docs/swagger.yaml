@@ -1,0 +1,251 @@
+definitions:
+  dto.CreateUserDto:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 30
+        minLength: 3
+        type: string
+      password:
+        maxLength: 30
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  dto.UpdateUserDto:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 30
+        minLength: 3
+        type: string
+    type: object
+  dto.UpdateUserPasswordDto:
+    properties:
+      old_password:
+        maxLength: 30
+        minLength: 8
+        type: string
+      password:
+        maxLength: 30
+        minLength: 8
+        type: string
+    required:
+    - old_password
+    - password
+    type: object
+  httperr.Fields:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+      value: {}
+    type: object
+  httperr.RestErr:
+    properties:
+      code:
+        type: integer
+      error:
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/httperr.Fields'
+        type: array
+      message:
+        type: string
+    type: object
+  response.ManyUsersResponse:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/response.UserResponse'
+        type: array
+    type: object
+  response.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: API users
+  version: "1.0"
+paths:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get many users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ManyUsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      security:
+      - ApiKeyAuth: []
+      summary: Get many users
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: Endpoint for update user
+      parameters:
+      - description: Update user dto
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user
+      tags:
+      - user
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete user by id
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: Get user by id
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      security:
+      - ApiKeyAuth: []
+      summary: User details
+      tags:
+      - user
+  /user/password/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Endpoint for Update user password
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update user password dto
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserPasswordDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user password
+      tags:
+      - user
+swagger: "2.0"
