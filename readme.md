@@ -1,7 +1,9 @@
 ## Project example for api users
 
 view post part 1 [here](https://wiliamvj.com/posts/api-golang-parte-1)
+
 view post part 2 [here](https://wiliamvj.com/posts/api-golang-parte-2)
+
 view post part 3 [here](https://wiliamvj.com/posts/api-golang-parte-3)
 
 run project:
