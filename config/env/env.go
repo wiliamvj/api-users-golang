@@ -10,6 +10,7 @@ type config struct {
   GoEnv       string `mapstructure:"GO_ENV"`
   GoPort      string `mapstructure:"GO_PORT"`
   DatabaseURL string `mapstructure:"DATABASE_URL"`
+  ViaCepURL   string `mapstructure:"VIA_CEP_URL"`
 }
 
 func LoadingConfig(path string) (*config, error) {

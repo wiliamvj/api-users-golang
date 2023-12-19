@@ -36,7 +36,7 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
   }
   err := json.NewDecoder(r.Body).Decode(&req)
   if err != nil {
-    slog.Error("error to decode body", "err", err, slog.String("package", "handler_user"))
+    slog.Error("error to decode body", "err", err, slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to decode body")
     json.NewEncoder(w).Encode(msg)
@@ -44,14 +44,20 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
   }
   httpErr := validation.ValidateHttpData(req)
   if httpErr != nil {
-    slog.Error(fmt.Sprintf("error to validate data: %v", httpErr), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to validate data: %v", httpErr), slog.String("package", "userhandler"))
     w.WriteHeader(httpErr.Code)
     json.NewEncoder(w).Encode(httpErr)
     return
   }
   err = h.service.CreateUser(r.Context(), req)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to create user: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to create user: %v", err), slog.String("package", "userhandler"))
+    if err.Error() == "cep not found" {
+      w.WriteHeader(http.StatusNotFound)
+      msg := httperr.NewNotFoundError("cep not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
     w.WriteHeader(http.StatusInternalServerError)
     msg := httperr.NewBadRequestError("error to create user")
     json.NewEncoder(w).Encode(msg)
@@ -85,7 +91,7 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
   }
   _, err := uuid.Parse(id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to parse id")
     json.NewEncoder(w).Encode(msg)
@@ -100,7 +106,7 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
   }
   err = json.NewDecoder(r.Body).Decode(&req)
   if err != nil {
-    slog.Error("error to decode body", "err", err, slog.String("package", "handler_user"))
+    slog.Error("error to decode body", "err", err, slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to decode body")
     json.NewEncoder(w).Encode(msg)
@@ -108,17 +114,23 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
   }
   httpErr := validation.ValidateHttpData(req)
   if httpErr != nil {
-    slog.Error(fmt.Sprintf("error to validate data: %v", httpErr), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to validate data: %v", httpErr), slog.String("package", "userhandler"))
     w.WriteHeader(httpErr.Code)
     json.NewEncoder(w).Encode(httpErr)
     return
   }
   err = h.service.UpdateUser(r.Context(), req, id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to update user: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to update user: %v", err), slog.String("package", "userhandler"))
     if err.Error() == "user not found" {
       w.WriteHeader(http.StatusNotFound)
       msg := httperr.NewNotFoundError("user not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
+    if err.Error() == "cep not found" {
+      w.WriteHeader(http.StatusNotFound)
+      msg := httperr.NewNotFoundError("cep not found")
       json.NewEncoder(w).Encode(msg)
       return
     }
@@ -152,7 +164,7 @@ func (h *handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
   }
   _, err := uuid.Parse(id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to parse id")
     json.NewEncoder(w).Encode(msg)
@@ -160,7 +172,7 @@ func (h *handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
   }
   res, err := h.service.GetUserByID(r.Context(), id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to get user: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to get user: %v", err), slog.String("package", "userhandler"))
     if err.Error() == "user not found" {
       w.WriteHeader(http.StatusNotFound)
       msg := httperr.NewNotFoundError("user not found")
@@ -201,7 +213,7 @@ func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
   }
   _, err := uuid.Parse(id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to parse id")
     json.NewEncoder(w).Encode(msg)
@@ -209,7 +221,7 @@ func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
   }
   err = h.service.DeleteUser(r.Context(), id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to delete user: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to delete user: %v", err), slog.String("package", "userhandler"))
     if err.Error() == "user not found" {
       w.WriteHeader(http.StatusNotFound)
       msg := httperr.NewNotFoundError("user not found")
@@ -239,7 +251,7 @@ func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 func (h *handler) FindManyUsers(w http.ResponseWriter, r *http.Request) {
   res, err := h.service.FindManyUsers(r.Context())
   if err != nil {
-    slog.Error(fmt.Sprintf("error to find many users: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to find many users: %v", err), slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusInternalServerError)
     msg := httperr.NewBadRequestError("error to find many users")
     json.NewEncoder(w).Encode(msg)
@@ -276,7 +288,7 @@ func (h *handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
   }
   _, err := uuid.Parse(id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to parse id: %v", err), slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to parse id")
     json.NewEncoder(w).Encode(msg)
@@ -291,7 +303,7 @@ func (h *handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
   }
   err = json.NewDecoder(r.Body).Decode(&req)
   if err != nil {
-    slog.Error("error to decode body", "err", err, slog.String("package", "handler_user"))
+    slog.Error("error to decode body", "err", err, slog.String("package", "userhandler"))
     w.WriteHeader(http.StatusBadRequest)
     msg := httperr.NewBadRequestError("error to decode body")
     json.NewEncoder(w).Encode(msg)
@@ -299,14 +311,14 @@ func (h *handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
   }
   httpErr := validation.ValidateHttpData(req)
   if httpErr != nil {
-    slog.Error(fmt.Sprintf("error to validate data: %v", httpErr), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to validate data: %v", httpErr), slog.String("package", "userhandler"))
     w.WriteHeader(httpErr.Code)
     json.NewEncoder(w).Encode(httpErr)
     return
   }
   err = h.service.UpdateUserPassword(r.Context(), &req, id)
   if err != nil {
-    slog.Error(fmt.Sprintf("error to update user password: %v", err), slog.String("package", "handler_user"))
+    slog.Error(fmt.Sprintf("error to update user password: %v", err), slog.String("package", "userhandler"))
     if err.Error() == "user not found" {
       w.WriteHeader(http.StatusNotFound)
       msg := httperr.NewNotFoundError("user not found")

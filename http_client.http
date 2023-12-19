@@ -6,7 +6,8 @@ content-type: application/json
 {
   "name": "John Doe",
   "email": "john.doe@email.com",
-  "password": "12345678@"
+  "password": "12345678@",
+  "cep": "77132243"
 }
 
 ###
@@ -17,7 +18,8 @@ content-type: application/json
 
 {
   "name": "John Doe",
-  "email": "john.doe@email.com"
+  "email": "john.doe@email.com",
+  "cep": "00000000"
 }
 
 ###
