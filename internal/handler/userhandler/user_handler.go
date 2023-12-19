@@ -116,9 +116,14 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
   err = h.service.UpdateUser(r.Context(), req, id)
   if err != nil {
     slog.Error(fmt.Sprintf("error to update user: %v", err), slog.String("package", "handler_user"))
-    w.WriteHeader(http.StatusInternalServerError)
-    msg := httperr.NewBadRequestError("error to update user")
-    json.NewEncoder(w).Encode(msg)
+    if err.Error() == "user not found" {
+      w.WriteHeader(http.StatusNotFound)
+      msg := httperr.NewNotFoundError("user not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
+    w.WriteHeader(http.StatusBadRequest)
+    json.NewEncoder(w).Encode(err)
     return
   }
 }
@@ -156,6 +161,12 @@ func (h *handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
   res, err := h.service.GetUserByID(r.Context(), id)
   if err != nil {
     slog.Error(fmt.Sprintf("error to get user: %v", err), slog.String("package", "handler_user"))
+    if err.Error() == "user not found" {
+      w.WriteHeader(http.StatusNotFound)
+      msg := httperr.NewNotFoundError("user not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
     w.WriteHeader(http.StatusInternalServerError)
     msg := httperr.NewBadRequestError("error to get user")
     json.NewEncoder(w).Encode(msg)
@@ -199,6 +210,12 @@ func (h *handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
   err = h.service.DeleteUser(r.Context(), id)
   if err != nil {
     slog.Error(fmt.Sprintf("error to delete user: %v", err), slog.String("package", "handler_user"))
+    if err.Error() == "user not found" {
+      w.WriteHeader(http.StatusNotFound)
+      msg := httperr.NewNotFoundError("user not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
     w.WriteHeader(http.StatusInternalServerError)
     msg := httperr.NewBadRequestError("error to delete user")
     json.NewEncoder(w).Encode(msg)
@@ -290,6 +307,12 @@ func (h *handler) UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
   err = h.service.UpdateUserPassword(r.Context(), &req, id)
   if err != nil {
     slog.Error(fmt.Sprintf("error to update user password: %v", err), slog.String("package", "handler_user"))
+    if err.Error() == "user not found" {
+      w.WriteHeader(http.StatusNotFound)
+      msg := httperr.NewNotFoundError("user not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
     w.WriteHeader(http.StatusInternalServerError)
     msg := httperr.NewBadRequestError("error to update user password")
     json.NewEncoder(w).Encode(msg)
