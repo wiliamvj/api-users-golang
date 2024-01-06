@@ -7,14 +7,15 @@ content-type: application/json
   "name": "John Doe",
   "email": "john.doe@email.com",
   "password": "12345678@",
-  "cep": "77132243"
+  "cep": "01153000"
 }
 
 ###
 
 ## UpdateUser
-PATCH http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+PATCH http://localhost:8080/user HTTP/1.1
 content-type: application/json
+Authorization: Bearer jwt_token
 
 {
   "name": "John Doe",
@@ -25,28 +26,44 @@ content-type: application/json
 ###
 
 ## GetUserByID
-GET http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+GET http://localhost:8080/user HTTP/1.1
 content-type: application/json
+Authorization: Bearer jwt_token
 
 ###
 
 ## DeleteUser
-DELETE http://localhost:8080/user/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+DELETE http://localhost:8080/user HTTP/1.1
 content-type: application/json
+Authorization: Bearer jwt_token
 
 ###
 
 ## FindManyUsers
-GET http://localhost:8080/user HTTP/1.1
+GET http://localhost:8080/user/list-all HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGVtYWlsLmNvbSIsImV4cCI6MTcwNDQyOTE2NSwiaWQiOiIxIiwibmFtZSI6IkpvaG4ifQ.lTFzOEh7RSVdEoM3WnWvlY4KeQq2G8cDMdluYovOQGs
 
 ###
 
 ## UpdateUserPassword
-PATCH http://localhost:8080/user/password/9d47a06e-9677-460c-84e3-1bb7ac20b931 HTTP/1.1
+PATCH http://localhost:8080/user/password HTTP/1.1
 content-type: application/json
+Authorization: Bearer jwt_token
 
 {
   "password": "12345678@",
   "old_password": "12345678@"
+}
+
+
+###
+
+## Login
+POST http://localhost:8080/auth/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "john.doe@email.com",
+  "password": "12345678@"
 }

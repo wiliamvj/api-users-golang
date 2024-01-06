@@ -1,6 +1,10 @@
 definitions:
   dto.CreateUserDto:
     properties:
+      cep:
+        maxLength: 8
+        minLength: 8
+        type: string
       email:
         type: string
       name:
@@ -12,12 +16,17 @@ definitions:
         minLength: 8
         type: string
     required:
+    - cep
     - email
     - name
     - password
     type: object
   dto.UpdateUserDto:
     properties:
+      cep:
+        maxLength: 8
+        minLength: 8
+        type: string
       email:
         type: string
       name:
@@ -86,6 +95,38 @@ info:
   version: "1.0"
 paths:
   /user:
+    delete:
+      consumes:
+      - application/json
+      description: delete user by id
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user
+      tags:
+      - user
     get:
       consumes:
       - application/json
@@ -146,74 +187,7 @@ paths:
       summary: Update user
       tags:
       - user
-  /user/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: delete user by id
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/httperr.RestErr'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/httperr.RestErr'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/httperr.RestErr'
-      security:
-      - ApiKeyAuth: []
-      summary: Delete user
-      tags:
-      - user
-    get:
-      consumes:
-      - application/json
-      description: Get user by id
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.UserResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/httperr.RestErr'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/httperr.RestErr'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/httperr.RestErr'
-      security:
-      - ApiKeyAuth: []
-      summary: User details
-      tags:
-      - user
-  /user/password/{id}:
+  /user/password:
     get:
       consumes:
       - application/json

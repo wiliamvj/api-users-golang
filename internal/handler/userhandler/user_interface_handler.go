@@ -23,4 +23,5 @@ type UserHandler interface {
   DeleteUser(w http.ResponseWriter, r *http.Request)
   FindManyUsers(w http.ResponseWriter, r *http.Request)
   UpdateUserPassword(w http.ResponseWriter, r *http.Request)
+  Login(w http.ResponseWriter, r *http.Request)
 }

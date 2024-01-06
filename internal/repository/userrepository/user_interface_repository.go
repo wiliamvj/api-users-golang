@@ -28,4 +28,5 @@ type UserRepository interface {
   DeleteUser(ctx context.Context, id string) error
   FindManyUsers(ctx context.Context) ([]entity.UserEntity, error)
   UpdatePassword(ctx context.Context, pass, id string) error
+  GetUserPassword(ctx context.Context, id string) (*entity.UserEntity, error)
 }
