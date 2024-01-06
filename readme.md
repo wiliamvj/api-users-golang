@@ -8,6 +8,8 @@ view post part 3 [here](https://wiliamvj.com/posts/api-golang-parte-3)
 
 view post part 4 [here](https://wiliamvj.com/posts/api-golang-parte-4)
 
+view post part 5 [here](https://wiliamvj.com/posts/api-golang-parte-5)
+
 run project:
 ```bash
   go run cmd/webserver/main.go
