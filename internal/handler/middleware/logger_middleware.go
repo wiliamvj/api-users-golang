@@ -11,7 +11,7 @@ import (
   "github.com/wiliamvj/api-users-golang/internal/common/utils"
 )
 
-var sensitiveKeywords = []string{"password", "email"}
+var sensitiveKeywords = []string{"password"}
 
 func hasSensitiveData(body map[string]interface{}) bool {
   for key := range body {
