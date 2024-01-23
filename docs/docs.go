@@ -60,6 +60,47 @@ const docTemplate = `{
                     }
                 }
             },
+            "post": {
+                "description": "Endpoint for create user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create new user",
+                "parameters": [
+                    {
+                        "description": "Create user dto",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httperr.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httperr.RestErr"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -328,9 +369,32 @@ const docTemplate = `{
                 }
             }
         },
+        "response.UserAddress": {
+            "type": "object",
+            "properties": {
+                "cep": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "complement": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "uf": {
+                    "type": "string"
+                }
+            }
+        },
         "response.UserResponse": {
             "type": "object",
             "properties": {
+                "address": {
+                    "$ref": "#/definitions/response.UserAddress"
+                },
                 "created_at": {
                     "type": "string"
                 },

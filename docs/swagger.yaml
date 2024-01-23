@@ -76,8 +76,23 @@ definitions:
           $ref: '#/definitions/response.UserResponse'
         type: array
     type: object
+  response.UserAddress:
+    properties:
+      cep:
+        type: string
+      city:
+        type: string
+      complement:
+        type: string
+      street:
+        type: string
+      uf:
+        type: string
+    type: object
   response.UserResponse:
     properties:
+      address:
+        $ref: '#/definitions/response.UserAddress'
       created_at:
         type: string
       email:
@@ -185,6 +200,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update user
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Endpoint for create user
+      parameters:
+      - description: Create user dto
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      summary: Create new user
       tags:
       - user
   /user/password:

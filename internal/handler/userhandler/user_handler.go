@@ -22,7 +22,7 @@ import (
 //	@Success		200
 //	@Failure		400	{object}	httperr.RestErr
 //	@Failure		500	{object}	httperr.RestErr
-//	@Router			/user [get]
+//	@Router			/user [post]
 func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
   var req dto.CreateUserDto
 

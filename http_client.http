@@ -19,7 +19,7 @@ Authorization: Bearer {{token}}
 
 {
   "name": "John Doe",
-  "email": "john2.doe@email.com",
+  "email": "john.doe2s@email.com",
   "cep": "88132243"
 }
 ###
@@ -59,7 +59,7 @@ POST http://localhost:8080/auth/login HTTP/1.1
 content-type: application/json
 
 {
-  "email": "john.doe3@email.com",
+  "email": "john.doe2@email.com",
   "password": "12345678@"
 }
 ###
