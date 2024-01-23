@@ -57,6 +57,12 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
       json.NewEncoder(w).Encode(msg)
       return
     }
+    if err.Error() == "user already exists" {
+      w.WriteHeader(http.StatusBadRequest)
+      msg := httperr.NewBadRequestError("user already exists")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
     w.WriteHeader(http.StatusInternalServerError)
     msg := httperr.NewBadRequestError("error to create user")
     json.NewEncoder(w).Encode(msg)
@@ -122,6 +128,12 @@ func (h *handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
     if err.Error() == "cep not found" {
       w.WriteHeader(http.StatusNotFound)
       msg := httperr.NewNotFoundError("cep not found")
+      json.NewEncoder(w).Encode(msg)
+      return
+    }
+    if err.Error() == "user already exists" {
+      w.WriteHeader(http.StatusBadRequest)
+      msg := httperr.NewBadRequestError("user already exists with this email")
       json.NewEncoder(w).Encode(msg)
       return
     }

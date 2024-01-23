@@ -1,69 +1,66 @@
 
 ## CreateUser
+
 POST http://localhost:8080/user HTTP/1.1
 content-type: application/json
 
 {
   "name": "John Doe",
-  "email": "john.doe@email.com",
+  "email": "john.doe2@email.com",
   "password": "12345678@",
   "cep": "01153000"
 }
-
 ###
 
 ## UpdateUser
 PATCH http://localhost:8080/user HTTP/1.1
 content-type: application/json
-Authorization: Bearer jwt_token
+Authorization: Bearer {{token}}
 
 {
   "name": "John Doe",
-  "email": "john.doe@email.com",
-  "cep": "00000000"
+  "email": "john2.doe@email.com",
+  "cep": "88132243"
 }
-
 ###
 
 ## GetUserByID
 GET http://localhost:8080/user HTTP/1.1
 content-type: application/json
-Authorization: Bearer jwt_token
-
+Authorization: Bearer {{token}}
 ###
 
 ## DeleteUser
 DELETE http://localhost:8080/user HTTP/1.1
 content-type: application/json
-Authorization: Bearer jwt_token
-
-###
+Authorization: Bearer {{token}}
+####
 
 ## FindManyUsers
 GET http://localhost:8080/user/list-all HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGVtYWlsLmNvbSIsImV4cCI6MTcwNDQyOTE2NSwiaWQiOiIxIiwibmFtZSI6IkpvaG4ifQ.lTFzOEh7RSVdEoM3WnWvlY4KeQq2G8cDMdluYovOQGs
-
+Authorization: Bearer {{token}}
 ###
 
 ## UpdateUserPassword
 PATCH http://localhost:8080/user/password HTTP/1.1
 content-type: application/json
-Authorization: Bearer jwt_token
+Authorization: Bearer {{token}}
 
 {
-  "password": "12345678@",
+  "password": "123456789@",
   "old_password": "12345678@"
 }
-
-
 ###
 
 ## Login
+# @name login
 POST http://localhost:8080/auth/login HTTP/1.1
 content-type: application/json
 
 {
-  "email": "john.doe@email.com",
+  "email": "john.doe3@email.com",
   "password": "12345678@"
 }
+###
+@token = {{login.response.body.access_token}}
