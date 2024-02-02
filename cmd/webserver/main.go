@@ -11,9 +11,13 @@ import (
   _ "github.com/wiliamvj/api-users-golang/docs"
   "github.com/wiliamvj/api-users-golang/internal/database"
   "github.com/wiliamvj/api-users-golang/internal/database/sqlc"
+  "github.com/wiliamvj/api-users-golang/internal/handler"
   "github.com/wiliamvj/api-users-golang/internal/handler/routes"
-  "github.com/wiliamvj/api-users-golang/internal/handler/userhandler"
+  "github.com/wiliamvj/api-users-golang/internal/repository/categoryrepository"
+  "github.com/wiliamvj/api-users-golang/internal/repository/productrepository"
   "github.com/wiliamvj/api-users-golang/internal/repository/userrepository"
+  "github.com/wiliamvj/api-users-golang/internal/service/categoryservice"
+  "github.com/wiliamvj/api-users-golang/internal/service/productservice"
   "github.com/wiliamvj/api-users-golang/internal/service/userservice"
 )
 
@@ -37,11 +41,20 @@ func main() {
   // user
   userRepo := userrepository.NewUserRepository(dbConnection, queries)
   newUserService := userservice.NewUserService(userRepo)
-  newUserHandler := userhandler.NewUserHandler(newUserService)
+
+  // category
+  categoryRepo := categoryrepository.NewCategoryRepository(dbConnection, queries)
+  newCategoryService := categoryservice.NewCategoryService(categoryRepo)
+
+  // product
+  productRepo := productrepository.NewProductRepository(dbConnection, queries)
+  productsService := productservice.NewProductService(productRepo)
+
+  newHandler := handler.NewHandler(newUserService, newCategoryService, productsService)
 
   // init routes
   router := chi.NewRouter()
-  routes.InitUserRoutes(router, newUserHandler)
+  routes.InitRoutes(router, newHandler)
   routes.InitDocsRoutes(router)
 
   port := fmt.Sprintf(":%s", env.Env.GoPort)

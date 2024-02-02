@@ -16,8 +16,10 @@ var sensitiveKeywords = []string{"password"}
 func hasSensitiveData(body map[string]interface{}) bool {
   for key := range body {
     for _, keyword := range sensitiveKeywords {
-      if strings.Contains(strings.ToLower(key), keyword) || strings.Contains(strings.ToLower(body[key].(string)), keyword) {
-        return true
+      if value, ok := body[key].(string); ok {
+        if strings.Contains(strings.ToLower(key), keyword) || strings.Contains(strings.ToLower(value), keyword) {
+          return true
+        }
       }
     }
   }
@@ -38,9 +40,10 @@ func LoggerData(next http.Handler) http.Handler {
       if hasSensitiveData(requestData) {
         for key := range requestData {
           for _, keyword := range sensitiveKeywords {
-
-            if strings.Contains(strings.ToLower(key), keyword) || strings.Contains(strings.ToLower(requestData[key].(string)), keyword) {
-              requestData[key] = "[REDACTED]"
+            if value, ok := requestData[key].(string); ok {
+              if strings.Contains(strings.ToLower(key), keyword) || strings.Contains(strings.ToLower(value), keyword) {
+                requestData[key] = "[REDACTED]"
+              }
             }
           }
         }
@@ -56,11 +59,11 @@ func LoggerData(next http.Handler) http.Handler {
     if err != nil {
       userID = "no token"
       userEmail = "no token"
-
     } else {
       userID = user.ID
       userEmail = user.Email
     }
+
     slog.Info("request_data",
       slog.Any("url", r.URL.Path),
       slog.Any("method", r.Method),

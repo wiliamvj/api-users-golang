@@ -57,6 +57,14 @@ func ValidateHttpData(d interface{}) *httperr.RestErr {
         cause.Message = fmt.Sprintf("%s must contain at least one of the following characters: !@#$%%*", fieldName)
         cause.Field = fieldName
         cause.Value = e.Value()
+      case "dive":
+        cause.Message = fmt.Sprintf("%s is not a valid array", fieldName)
+        cause.Field = fieldName
+        cause.Value = e.Value()
+      case "gt":
+        cause.Message = fmt.Sprintf("%s must have at least %s elements", fieldName, e.Param())
+        cause.Field = fieldName
+        cause.Value = e.Value()
       default:
         cause.Message = "invalid field"
         cause.Field = fieldName

@@ -22,6 +22,30 @@ type Address struct {
 	UserID     string
 }
 
+type Category struct {
+	ID        string
+	Title     string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+type Product struct {
+	ID          string
+	Title       string
+	Price       int32
+	Description sql.NullString
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+}
+
+type ProductCategory struct {
+	ID         string
+	ProductID  string
+	CategoryID string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
 type User struct {
 	ID        string
 	Name      string
