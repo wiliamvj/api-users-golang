@@ -11,6 +11,17 @@ import (
   "github.com/wiliamvj/api-users-golang/internal/handler/validation"
 )
 
+// Create category
+//	@Summary		Create new category
+//	@Description	Endpoint for create category
+//	@Tags			category
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body	dto.CreateCategoryDto	true	"Create category dto"	true
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/category [post]
 func (h *handler) CreateCategory(w http.ResponseWriter, r *http.Request) {
   var req dto.CreateCategoryDto
 

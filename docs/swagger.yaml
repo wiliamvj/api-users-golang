@@ -1,4 +1,37 @@
 definitions:
+  dto.CreateCategoryDto:
+    properties:
+      title:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - title
+    type: object
+  dto.CreateProductDto:
+    properties:
+      categories:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      description:
+        maxLength: 500
+        minLength: 3
+        type: string
+      price:
+        minimum: 1
+        type: integer
+      title:
+        maxLength: 40
+        minLength: 3
+        type: string
+    required:
+    - categories
+    - description
+    - price
+    - title
+    type: object
   dto.CreateUserDto:
     properties:
       cep:
@@ -20,6 +53,37 @@ definitions:
     - email
     - name
     - password
+    type: object
+  dto.FindProductDto:
+    properties:
+      categories:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      search:
+        maxLength: 40
+        minLength: 2
+        type: string
+    type: object
+  dto.UpdateProductDto:
+    properties:
+      categories:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      description:
+        maxLength: 500
+        minLength: 3
+        type: string
+      price:
+        minimum: 1
+        type: integer
+      title:
+        maxLength: 40
+        minLength: 3
+        type: string
     type: object
   dto.UpdateUserDto:
     properties:
@@ -69,12 +133,36 @@ definitions:
       message:
         type: string
     type: object
+  response.CategoryResponse:
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+    type: object
   response.ManyUsersResponse:
     properties:
       users:
         items:
           $ref: '#/definitions/response.UserResponse'
         type: array
+    type: object
+  response.ProductResponse:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/response.CategoryResponse'
+        type: array
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
     type: object
   response.UserAddress:
     properties:
@@ -109,6 +197,150 @@ info:
   title: API users
   version: "1.0"
 paths:
+  /category:
+    post:
+      consumes:
+      - application/json
+      description: Endpoint for create category
+      parameters:
+      - description: Create category dto
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCategoryDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      summary: Create new category
+      tags:
+      - category
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: Endpoint for search product
+      parameters:
+      - description: Search products
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FindProductDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      summary: Search products
+      tags:
+      - product
+    post:
+      consumes:
+      - application/json
+      description: Endpoint for create product
+      parameters:
+      - description: Create product dto
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      summary: Create new product
+      tags:
+      - product
+  /product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Endpoint for update product
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      summary: Delete product
+      tags:
+      - product
+    patch:
+      consumes:
+      - application/json
+      description: Endpoint for update product
+      parameters:
+      - description: Update product dto
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateProductDto'
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httperr.RestErr'
+      summary: Update product
+      tags:
+      - product
   /user:
     delete:
       consumes:

@@ -13,6 +13,17 @@ import (
   "github.com/wiliamvj/api-users-golang/internal/handler/validation"
 )
 
+// Create product
+//	@Summary		Create new product
+//	@Description	Endpoint for create product
+//	@Tags			product
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body	dto.CreateProductDto	true	"Create product dto"	true
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/product [post]
 func (h *handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
   var req dto.CreateProductDto
 
@@ -53,6 +64,18 @@ func (h *handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
   w.WriteHeader(http.StatusCreated)
 }
 
+// Update product
+//	@Summary		Update product
+//	@Description	Endpoint for update product
+//	@Tags			product
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body	dto.UpdateProductDto	true	"Update product dto"	true
+//	@Param			id		path	string					true	"product id"
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/product/{id} [patch]
 func (h *handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
   var req dto.UpdateProductDto
 
@@ -114,6 +137,17 @@ func (h *handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
   w.WriteHeader(http.StatusOK)
 }
 
+// Delete product
+//	@Summary		Delete product
+//	@Description	Endpoint for update product
+//	@Tags			product
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path	string	true	"product id"
+//	@Success		200
+//	@Failure		400	{object}	httperr.RestErr
+//	@Failure		500	{object}	httperr.RestErr
+//	@Router			/product/{id} [delete]
 func (h *handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
   productID := chi.URLParam(r, "id")
   if productID == "" {
@@ -145,6 +179,17 @@ func (h *handler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
   w.WriteHeader(http.StatusOK)
 }
 
+//  Search products
+//	@Summary		Search products
+//	@Description	Endpoint for search product
+//	@Tags			product
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		dto.FindProductDto	true	"Search products"	true
+//	@Success		200		{object}	response.ProductResponse
+//	@Failure		400		{object}	httperr.RestErr
+//	@Failure		500		{object}	httperr.RestErr
+//	@Router			/product [get]
 func (h *handler) FindManyProducts(w http.ResponseWriter, r *http.Request) {
   var req dto.FindProductDto
 
